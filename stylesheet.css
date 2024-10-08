@@ -80,30 +80,40 @@ th,
 tr,
 p,
 a {
-  font-family: "roboto", Helvetica Neue;
-  font-size: 14px
+  /* font-family: "roboto", Helvetica Neue, Helvetica, sans-serif; */
+  font-family: "system-ui", "BlinkMacSystemFont", "serif";
+  font-size: 14px;
+  font-weight: 400; /* Set to regular */
 }
 
 strong {
-  font-family: "roboto", Helvetica Neue, Helvetica, sans-serif;
+  /* font-family: "roboto", Helvetica Neue, Helvetica, sans-serif; */
+  font-family: "system-ui", "BlinkMacSystemFont", "serif";
   font-size: 14px;
+  font-weight: 700; /* Strong should stay bold */
 }
 
 heading {
-  font-family: "roboto", Helvetica Neue, Helvetica, sans-serif;
+  /* font-family: "roboto", Helvetica Neue, Helvetica, sans-serif; */
+  font-family: "system-ui", "BlinkMacSystemFont", "serif";
   font-size: 22px;
+  font-weight: 400; /* Regular weight for heading */
 }
 
 papertitle {
-  font-family: "roboto", Helvetica Neue, Helvetica, sans-serif;
+  /* font-family: "roboto", Helvetica Neue, Helvetica, sans-serif; */
+  font-family: "system-ui", "BlinkMacSystemFont", "serif";
   font-size: 14px;
-  font-weight: 700
+  font-weight: 700; /* Paper title should stay bold */
 }
 
 name {
-  font-family: "roboto", Helvetica Neue, Helvetica, sans-serif;
+  /* font-family: "roboto", Helvetica Neue, Helvetica, sans-serif; */
+  font-family: "system-ui", "BlinkMacSystemFont", "serif";
   font-size: 32px;
+  font-weight: 400; /* Regular weight for name */
 }
+
 
 .one {
   width: 160px;
