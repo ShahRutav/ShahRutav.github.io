@@ -1,0 +1,135 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <title>AI summary: Cosmos Policy — Rutav Shah</title>
+
+  <meta name="author" content="Rutav Shah">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Paths use ../ because this file lives in papers/ -->
+  <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+  <link rel="stylesheet" href="https://use.typekit.net/umr4dgq.css">
+  <link rel="shortcut icon" href="#">
+
+  <style>
+    .summary p, .summary li {
+      text-align: left;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .summary p { margin: 0 0 1.1em 0; }
+    .summary h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 1.8em 0 0.5em 0;
+    }
+    .summary ul, .summary ol { margin: 0 0 1.1em 1.2em; padding: 0; }
+    .summary li { margin: 0 0 0.4em 0; }
+    .summary code {
+      background: #f6f8fa;
+      padding: 0.1em 0.3em;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+    .post-title { font-size: 22px; font-weight: 700; margin-bottom: 0.2em; }
+    .meta { color: #555; font-size: 14px; margin-bottom: 1.5em; }
+    .meta a { word-break: break-all; }
+    .ai-note {
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+      margin-bottom: 1.5em;
+    }
+    hr.rule { border: 0; border-top: 1px solid #eee; margin: 1.5em 0; }
+  </style>
+</head>
+
+<body>
+  <table style="width:100%;max-width:700px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:2.5%">
+
+        <p style="text-align:center">
+          <a href="../index.html">Home</a> &nbsp/&nbsp
+          <a href="../blog.html">All posts</a> &nbsp/&nbsp
+          <a href="../posts/wams-cosmos-policy.html">&larr; Back to post</a>
+        </p>
+
+        <br>
+
+        <div class="summary">
+          <div class="post-title">Cosmos Policy: Fine-Tuning Video Models for Visuomotor Control and Planning</div>
+          <p class="ai-note">AI generated summary.</p>
+
+          <div class="meta">
+            arXiv: 2601.16163 &nbsp;&middot;&nbsp; Venue: conference (ICLR-style final copy)
+            <br>
+            Authors: Moo Jin Kim, Yihuai Gao, Tsung-Yi Lin, Yen-Chen Lin, Yunhao Ge, Grace Lam, Percy Liang, Shuran Song, Ming-Yu Liu, Chelsea Finn, Jinwei Gu (NVIDIA + Stanford)
+            <br>
+            Project page: <a href="https://research.nvidia.com/labs/dir/cosmos-policy/">research.nvidia.com/labs/dir/cosmos-policy</a>
+          </div>
+
+          <hr class="rule">
+
+          <h2>One-line summary</h2>
+          <p>
+            Take a pretrained video diffusion model (Cosmos-Predict2-2B). With zero architectural changes and a single stage of fine-tuning, turn it into a robot policy that jointly predicts actions, future states, and values. Then use those predictions for test-time model-based planning (best-of-N).
+          </p>
+
+          <h2>The core idea: latent frame injection</h2>
+          <p>The whole trick is how non-image modalities are fed to a video model without touching its architecture:</p>
+          <ol>
+            <li>Video is tokenized by a VAE into a sequence of latent frames of shape <code>(1+T') × H' × W' × 16</code>.</li>
+            <li>New modalities (robot proprioception, action chunk, scalar value) and extra camera views are interleaved as additional latent frames in that sequence.</li>
+            <li>Low-dim vectors (e.g. an action chunk <code>K × d_act</code>) are normalized to <code>[-1, +1]</code>, flattened, and duplicated/tiled to fill an <code>H' × W' × C'</code> latent volume, overwriting a blank placeholder frame.</li>
+            <li>Everything is trained with the same EDM denoising objective the base model already uses. No new heads, no separate action diffuser, no inverse dynamics model.</li>
+            <li>At inference, extract a modality by averaging across its duplicated copies in the denoised latent and un-normalizing. Non-image modalities need no VAE decode.</li>
+          </ol>
+          <p>The sequence ordering <code>(s, a, s', V(s'))</code> supports two decode modes:</p>
+          <ul>
+            <li>Parallel decoding: fast, used for the direct policy.</li>
+            <li>Autoregressive left-to-right decoding: higher quality, used for planning.</li>
+          </ul>
+
+          <h2>Unified policy + world model + value function</h2>
+          <p>One model, three roles, selected purely by the conditioning mask (which latent frames are clean vs. denoised):</p>
+          <ul>
+            <li><strong>Policy:</strong> <code>p(a, s', V(s') | s)</code>, with auxiliary future-state and value targets, not just <code>p(a|s)</code>.</li>
+            <li><strong>World model:</strong> <code>p(s', V(s') | s, a)</code>.</li>
+            <li><strong>Value function:</strong> <code>p(V(s') | s, a, s')</code>, Monte Carlo returns, sparse terminal reward <code>γ^{H-t} R(s_H, a_H)</code>.</li>
+          </ul>
+          <p>
+            Training batches are split (e.g. 50% demos to policy, 25% rollouts to world model, 25% rollouts to value). Masking the value inputs lets the same machinery represent either <code>V(s')</code> (needs world model) or <code>Q(s,a)</code> (model-free).
+          </p>
+
+          <h2>Planning</h2>
+          <ul>
+            <li>Train-on-demos-only is insufficient for planning. The world model and value only see successful, narrow state distributions.</li>
+            <li>Collect policy rollout data (successes and failures). Fine-tune a separate "planning model" with heavy weighting (90% world-model+value, 10% policy). Keep the original checkpoint as the "policy model". This dual deployment keeps the world model trained on on-policy data.</li>
+            <li>Best-of-N: sample N action chunks from the policy, imagine future state per chunk, score by predicted value, execute the highest-value chunk. Ensemble (3 world-model × 5 value = 15 value preds per action), aggregate via "majority mean" for robustness to bimodal predictions.</li>
+            <li>Parallelize N over N GPUs.</li>
+          </ul>
+
+          <h2>Two practical training tricks</h2>
+          <ol>
+            <li><strong>Noise schedule matters for actions.</strong> The base video model's log-normal <code>σ</code> sampling under-weights high noise levels. Actions need precision, so they use a hybrid log-normal + uniform (0.7/0.3) with a fatter high-<code>σ</code> tail. At test time they raise <code>σ_min</code> from 0.002 to 4, since the last near-zero denoising steps are low-SNR and hurt action accuracy.</li>
+            <li><strong>Auxiliary future-state supervision carries the method.</strong> RoboCasa ablation: removing world+value samples drops 67.1 to 64.0. Removing the future-state auxiliary target on the policy collapses it to 44.4%. Predicting the future is doing most of the work, not just the value.</li>
+          </ol>
+
+          <h2>Headline results</h2>
+          <ul>
+            <li><strong>LIBERO:</strong> 98.5% avg (SOTA), beating π₀.₅, OpenVLA-OFT, CogVLA, and others.</li>
+            <li><strong>RoboCasa:</strong> 67.1% avg with only 50 demos/task (others use 300 to 3000).</li>
+            <li><strong>Real ALOHA bimanual:</strong> 93.6% avg score. Planning adds +12.5 pts on the two hardest tasks.</li>
+            <li><strong>Ablations:</strong> no pretrained weights drops 3.9 pts (video priors matter). Model-based <code>V(s')</code> planning beats model-free <code>Q(s,a)</code> under limited rollout data.</li>
+            <li><strong>Cost:</strong> about 0.61s per action-chunk (5 steps) as a direct policy. Planning search is about 4.9s on 8 GPUs, too slow for dynamic tasks (their stated limitation).</li>
+          </ul>
+
+        </div>
+
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

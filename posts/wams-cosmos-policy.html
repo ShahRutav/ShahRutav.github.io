@@ -1,0 +1,393 @@
+<!DOCTYPE HTML>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <!-- ===== EDIT THE POST TITLE IN ONE PLACE ===== -->
+  <script>window.POST_TITLE = "World-Action-Models";</script>
+
+  <!-- Filled from POST_TITLE by the script at the end of <body>. -->
+  <title></title>
+
+  <meta name="author" content="Rutav Shah">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Paths use ../ because posts live one directory down in posts/ -->
+  <link rel="stylesheet" type="text/css" href="../stylesheet.css">
+  <link rel="stylesheet" href="https://use.typekit.net/umr4dgq.css">
+  <link rel="shortcut icon" href="#">
+
+  <!-- MathJax for inline LaTeX like \(p(s'|s,a)\) -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+
+  <style>
+    /* Paul Graham style: a single narrow column of plain text, generous
+       line spacing, wide margins, nothing else competing for attention. */
+    .blog-post p {
+      text-align: left;
+      line-height: 1.6;
+      font-size: 15px;
+      margin: 0 0 1.1em 0;
+    }
+    .blog-post ul {
+      margin: 0 0 1.1em 0;
+      padding-left: 1.4em;
+    }
+    .blog-post li {
+      text-align: left;
+      line-height: 1.45;
+      font-size: 15px;
+      margin-bottom: 0.3em;
+    }
+    /* Per-paper writing: slightly smaller than the framing text and set on a
+       faint gray panel so the paper-specific discussion reads as distinct. */
+    .blog-post .paper-note {
+      background: #f0f0ee;
+      border: 1px solid #e4e4e0;
+      border-radius: 4px;
+      padding: 0.6em 1.4em;
+      margin: 1.5em 0;
+    }
+    .blog-post .paper-note p,
+    .blog-post .paper-note li {
+      font-size: 13.5px;
+      line-height: 1.55;
+    }
+    .blog-post .paper-note pre {
+      background: #f6f8fa;
+      border-radius: 4px;
+      padding: 0.8em 1em;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 0 0 1.1em 0;
+    }
+    .blog-post .paper-note pre code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .blog-post img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 1.5em auto;
+    }
+    .blog-post figcaption {
+      text-align: center;
+      font-size: 13px;
+      color: #666;
+      margin-top: -1em;
+      margin-bottom: 1.5em;
+    }
+    .post-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 0.2em;
+    }
+    .post-date {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 1.5em;
+    }
+    .ai-summary-link {
+      margin: 1.2em 0 0.2em 0;
+      padding-top: 0.6em;
+      border-top: 1px solid #e4e4e0;
+      font-size: 12px;
+      color: #999;
+    }
+    .ai-summary-link a {
+      color: #5a7a9a;
+    }
+    .email-note {
+      margin-top: 2em;
+      font-size: 14px;
+      color: #444;
+    }
+    .todo {
+      color: #c0392b;
+    }
+    .fn-ref {
+      text-decoration: none;
+      font-size: 11px;
+      vertical-align: super;
+      line-height: 0;
+      color: #1772d0;
+    }
+    .footnotes {
+      margin-top: 2.5em;
+      padding-top: 1em;
+      border-top: 1px solid #ddd;
+      font-size: 11px;
+      color: #777;
+      line-height: 1.45;
+    }
+    .blog-post .footnotes p {
+      font-size: 11px;
+      line-height: 1.45;
+      margin: 0 0 0.35em 0;
+    }
+    .footnotes a {
+      text-decoration: none;
+      font-size: inherit;
+    }
+    /* References: distinct from note-style footnotes. Smaller, tighter,
+       and set apart with a lighter, letter-spaced look. */
+    .footnotes p.ref {
+      font-size: 11px;
+      line-height: 1.45;
+      color: #888;
+      letter-spacing: 0.01em;
+      margin: 0 0 0.35em 0;
+      padding-left: 1.2em;
+      text-indent: -1.2em;
+    }
+    .footnotes p.ref a {
+      color: #1772d0;
+    }
+    .footnotes p.ref cite {
+      font-style: italic;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <table style="width:100%;max-width:700px;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;"><tbody>
+    <tr style="padding:0px">
+      <td style="padding:2.5%">
+
+        <p style="text-align:center">
+          <a href="../index.html">Home</a> &nbsp/&nbsp
+          <a href="../blog.html">All posts</a>
+        </p>
+
+        <br>
+
+        <div class="blog-post">
+          <div class="post-title"></div>
+          <div class="post-date">July 4, 2026</div>
+
+          <!-- ===== YOUR WRITING GOES HERE ===== -->
+          <p>
+            There is a lot of interest in building world models into robot
+            policies. Before asking why, it helps to be precise about what we
+            mean. For robotics, a dynamics model is a specific form of world
+            model<a class="fn-ref" id="fnref1" href="#fn1"><sup>1</sup></a>:
+            \(p(s'|s,a)\), where \(a\) is the robot action. World model is used
+            more broadly. In video generation, for instance, the action \(a\)
+            can be a language prompt. Here I mean the robotics version, predicting the
+            next state from the current state and the robot's action. Why build
+            one into a policy? There are a few common reasons.
+          </p>
+          <ul>
+            <li>
+              Planning: a dynamics model lets you look ahead before acting and
+              spend extra compute per step.
+            </li>
+            <li>
+              Representation learning: fitting dynamics steers the model to
+              capture how the world changes, not just which action to output.
+            </li>
+            <li>
+              Generality: dynamics is broader than predicting the action for one
+              task. Random, suboptimal, and optimal data all teach how the world
+              works, so all of it is useful for learning.
+            </li>
+          </ul>
+          <p>
+            But a model-free policy can pick up each of these implicitly.
+            Compute can go straight into action prediction by stacking more
+            layers or recursive loops, instead of routing through a dynamics model.
+            Given enough data, the network may learn good enough
+            representations, and the latent may already capture the effect
+            before it predicts the final action. Suboptimal data can be folded
+            into action prediction by conditioning on the
+            reward.<a class="fn-ref" id="fnref2" href="#fn2"><sup>2</sup></a>
+            None of these justifies why learning a
+            dynamics or world model is a must for robotics.
+          </p>
+          <p>
+            The one thing that justifies learning dynamics to me is tapping
+            into human videos.<a class="fn-ref" id="fnref3" href="#fn3"><sup>3</sup></a>
+            A human video is
+            only states: we never see the actions. You could argue that the actions can be
+            extracted, either by a heuristic or by learning latent actions. But
+            a heuristic like "the state k steps ahead is the action" is not
+            fundamentally true and clearly mismatches robot actions, which are
+            truly actions and <em>not state disguised as actions</em>. And the
+            principled route, learning latent
+            actions,<a class="fn-ref" id="fnref4" href="#fn4"><sup>4</sup></a>
+            has to learn a dynamics model anyway.
+            <span class="todo">(TODO: instead of latent actions, talk about the
+            different ways of using world models and incorporating them.)</span>
+            So it can be argued to
+            fall into the bucket of learning a dynamics model, but a specific
+            way of folding it into policy learning.
+          </p>
+          <p>
+            World-Action-Models (WAMs)<a class="fn-ref" id="fnref5" href="#fn5"><sup>5</sup></a>
+            are one way to fold it in. Why do it this way, and what it
+            buys us, is what I want to work out by reading through these papers.
+            I will come back to that at the end.
+          </p>
+
+          <p>
+            <em>For each work below, I am not aiming to summarize the whole
+            paper. I discuss the things specific to that paper and the main
+            points I found interesting.</em>
+          </p>
+
+          <div class="paper-note">
+          <p>
+            <strong>Cosmos Policy: Fine-Tuning Video Models for Visuomotor
+            Control and Planning</strong><a class="fn-ref" id="fnref6" href="#fn6"><sup>6</sup></a>
+          </p>
+
+          <p>
+            The policy starts from a pretrained video model. Instead of only
+            predicting the action \(a\), it predicts three things at once: the
+            action \(a\), the future observation \(s'\), and its value
+            \(V(s')\). The future observation is predicted from the language,
+            the current observation, and the action. The value is predicted from
+            the full prefix, all of \(s\), \(a\), and \(s'\).
+          </p>
+
+          <figure>
+            <img src="../images/cosmos_policy_overview.jpeg"
+                 alt="Cosmos Policy overview: current state and task description go into a fine-tuned Cosmos diffusion transformer, which predicts the action chunk, the future state, and the value.">
+            <figcaption>
+              From the current state and task description, the fine-tuned Cosmos
+              diffusion transformer predicts the action chunk \(a\), the future
+              state \(s'\), and the value \(V(s')\). (Figure from the paper.)
+            </figcaption>
+          </figure>
+
+          <p>
+            Two parts are interesting to me.
+          </p>
+          <p>
+            <strong>1. Adding new modalities without changing the
+            architecture.</strong> The Cosmos model is only
+            trained on latent frames. Robot policies need modalities it never saw
+            during pretraining: proprioception, the action chunk, and the state
+            value (scalar). The authors add these without any architectural
+            change by making each modality look like a (latent) frame. A
+            low-dimensional vector is normalized to \([-1, 1]\), tiled to fill a
+            latent volume the size of one frame, and inserted into the sequence
+            in the order \((s, a, s', V(s'))\): current observation, action
+            chunk, future observation, value.
+          </p>
+          <p>
+            The same frozen layout then serves three roles, chosen by which
+            frames are clean inputs and which are denoised as outputs. Denoise
+            everything after \(s\) and it is a policy; denoise \(s'\) from
+            \((s, a)\) and it is a world model; denoise only \(V(s')\) from
+            \((s, a, s')\) and it is a value function. Nothing is added to the
+            base model, and the same denoising objective trains all three.
+          </p>
+          <p>
+            The choice to add no new architecture rests on simplicity and on
+            reusing the pretrained prior. The evidence does not compare
+            latent-frame injection against an added module with the backbone and
+            data held fixed, so it is unclear whether not adding new modules is
+            better or worse.
+          </p>
+          <p>
+            <strong>2. Using the future prediction at test time.</strong> The
+            future prediction is not only a training signal. At test
+            time, the model samples several action candidates, imagines the
+            future observation each one leads to, scores those futures with a
+            value conditioned on the future observation alone, and executes the
+            best. This is Best-of-N sampling. The gain from the sampling alone is
+            not clear from the paper, but the combined benefit of fine-tuning on
+            the rollout dataset and then ranking with Best-of-N is 12.5 points on
+            the real-world ALOHA tasks.
+          </p>
+          <p>
+            So Cosmos Policy touches all three reasons from the start. It leans
+            on the pretrained prior, and dropping it costs 3.9 points on LIBERO.
+            It uses a world model for model-based planning, and folds in
+            suboptimal rollout data through the same objective. But the gains
+            are hard to read cleanly: the planning benefit comes bundled with
+            extra rollout fine-tuning, together giving 12.5 points on the two
+            real-world ALOHA tasks.
+          </p>
+
+          <!-- AI generated summary link. -->
+          <p class="ai-summary-link">
+            AI generated summary:
+            <a href="../papers/ai_summary_cosmos_policy.html">Link</a>
+          </p>
+          </div>
+
+          <!-- Email link + plain-text fallback. Keep the "[rutav-notes] "
+               prefix so you can find all replies by searching for "rutav-notes". -->
+          <p class="email-note">
+            If you find any errors, or have thoughts or disagreements, I would
+            love to hear them.
+            <br>
+            <a class="email-link" href="mailto:rutavms@utexas.edu">
+              Email me about this post &rarr;
+            </a>
+            <br>
+            Subject: <strong class="email-subject"></strong> &nbsp;&middot;&nbsp;
+            To: <strong>rutavms@utexas.edu</strong>
+          </p>
+
+          <div class="footnotes">
+            <p id="fn1" class="ref">
+              <a href="#fnref1">1.</a> Schmidhuber,
+              <cite>Making the world differentiable: on using fully recurrent
+              self-supervised neural networks for dynamic reinforcement learning
+              and planning in non-stationary environments</cite>, Tech. Report,
+              1990.
+            </p>
+            <p id="fn2" class="ref">
+              <a href="#fnref2">2.</a> Chen et al.,
+              <cite>Decision Transformer: Reinforcement Learning via Sequence
+              Modeling</cite>, NeurIPS 2021.
+            </p>
+            <p id="fn3">
+              <a href="#fnref3">3.</a> This assumes human videos carry
+              knowledge to offset the cost of scaling robot data.
+            </p>
+            <p id="fn4" class="ref">
+              <a href="#fnref4">4.</a> Bruce et al.,
+              <cite>Genie: Generative Interactive Environments</cite>, ICML 2024.
+            </p>
+            <p id="fn5" class="ref">
+              <a href="#fnref5">5.</a> Wang et al.,
+              <cite>World Action Models: The Next Frontier in Embodied
+              AI</cite>, arXiv:2605.12090, 2026.
+            </p>
+            <p id="fn6" class="ref">
+              <a href="#fnref6">6.</a> Kim et al.,
+              <cite>Cosmos Policy: Fine-Tuning Video Models for Visuomotor
+              Control and Planning</cite>, ICLR 2026.
+            </p>
+          </div>
+          <!-- ===== END YOUR WRITING ===== -->
+        </div>
+
+      </td>
+    </tr>
+  </table>
+
+  <!-- Populate every title slot from POST_TITLE so it is edited in one place. -->
+  <script>
+    (function () {
+      var t = window.POST_TITLE;
+      document.title = t + " — Rutav Shah";
+      document.querySelector(".post-title").textContent = t;
+      document.querySelector(".email-subject").textContent = "[rutav-notes] " + t;
+      var link = document.querySelector(".email-link");
+      link.href = "mailto:rutavms@utexas.edu?subject=" +
+        encodeURIComponent("[rutav-notes] " + t);
+    })();
+  </script>
+</body>
+
+</html>
